@@ -87,7 +87,7 @@ export const useUpdateLead = () => {
   return useMutation({
     mutationFn: async ({ id, ...updates }: Partial<Lead> & { id: string }) => {
       // Get old lead for status change tracking
-      const { data: oldLead } = await supabase.from('leads').select('status, name').eq('id', id).single();
+      const { data: oldLead } = await supabase.from('leads').select('status, name, assigned_to').eq('id', id).single();
 
       const { data, error } = await supabase
         .from('leads')
@@ -107,6 +107,11 @@ export const useUpdateLead = () => {
           metadata: { from: oldLead.status, to: updates.status },
         });
       }
+
+      // Note: Lead assignment/sharing emails require looking up other users' emails,
+      // which needs service role access. These notifications will be sent
+      // via the send-transactional-email edge function when the backend
+      // has access to recipient email addresses.
 
       return data;
     },

@@ -11,6 +11,7 @@ import KanbanBoard from "./pages/KanbanBoard";
 import UserManagement from "./pages/UserManagement";
 import Profile from "./pages/Profile";
 import AppLayout from "./components/crm/AppLayout";
+import Unsubscribe from "./pages/Unsubscribe";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="/users" element={<UserManagement />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
