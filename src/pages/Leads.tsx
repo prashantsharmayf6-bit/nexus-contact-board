@@ -46,14 +46,16 @@ const Leads = () => {
   }, [leads, filters, sortField, sortDir]);
 
   const handleCreate = async (data: any) => {
-    await createLead.mutateAsync(data);
+    const { shared_with, ...leadData } = data;
+    await createLead.mutateAsync(leadData);
     setFormOpen(false);
     toast.success('Lead created');
   };
 
   const handleUpdate = async (data: any) => {
     if (!editLead) return;
-    await updateLead.mutateAsync({ id: editLead.id, ...data });
+    const { shared_with, ...leadData } = data;
+    await updateLead.mutateAsync({ id: editLead.id, ...leadData });
     setEditLead(null);
     toast.success('Lead updated');
   };
