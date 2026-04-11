@@ -305,7 +305,6 @@ const UserManagement = () => {
                         </TableRow>
                       );
                     })}
-                    ))}
                   </TableBody>
                 </Table>
               )}
