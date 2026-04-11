@@ -49,10 +49,11 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
-      <Card className="w-full max-w-md shadow-xl border-0 bg-card">
+      <Card className="w-full max-w-md shadow-xl border-0 bg-card overflow-hidden">
+        <div className="h-1.5 bg-brand-gradient w-full" />
         <CardHeader className="text-center space-y-2">
           <img src={ezycrmLogo} alt="EzyCRM" className="mx-auto h-20 object-contain mb-2" />
-          <CardTitle className="text-2xl font-bold">Welcome to EzyCRM</CardTitle>
+          <CardTitle className="text-2xl font-bold">Welcome to <span className="text-brand-gradient">EzyCRM</span></CardTitle>
           <CardDescription>Manage your leads, close more deals</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
