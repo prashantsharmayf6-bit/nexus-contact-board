@@ -22,9 +22,9 @@ const AppSidebar = () => {
       <div className="p-6 border-b border-border">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">LF</span>
+            <span className="text-primary-foreground font-bold text-sm">Ez</span>
           </div>
-          <span className="text-lg font-bold text-foreground">LeadFlow</span>
+          <span className="text-lg font-bold text-foreground">EzyCRM</span>
         </div>
       </div>
 

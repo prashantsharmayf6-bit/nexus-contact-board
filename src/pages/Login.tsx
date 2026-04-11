@@ -51,9 +51,9 @@ const Login = () => {
       <Card className="w-full max-w-md shadow-xl border-0 bg-card">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-2">
-            <span className="text-primary-foreground font-bold text-xl">LF</span>
+            <span className="text-primary-foreground font-bold text-xl">Ez</span>
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome to LeadFlow</CardTitle>
+          <CardTitle className="text-2xl font-bold">Welcome to EzyCRM</CardTitle>
           <CardDescription>Manage your leads, close more deals</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
