@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import ezycrmLogo from '@/assets/ezycrm-logo.png';
 
 const links = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
@@ -21,9 +22,7 @@ const AppSidebar = () => {
     <aside className="w-64 border-r border-border bg-card flex flex-col h-screen sticky top-0">
       <div className="p-6 border-b border-border">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground font-bold text-sm">Ez</span>
-          </div>
+          <img src={ezycrmLogo} alt="EzyCRM" className="w-9 h-9" />
           <span className="text-lg font-bold text-foreground">EzyCRM</span>
         </div>
       </div>
