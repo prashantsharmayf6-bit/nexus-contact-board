@@ -26,8 +26,10 @@ serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) throw new Error("Unauthorized");
+    const token = authHeader.replace('Bearer ', '');
+    const { data, error: authError } = await supabase.auth.getUser(token);
+    if (authError || !data?.user) throw new Error("Unauthorized");
+    const user = data.user;
 
     const { lead_id } = await req.json();
     if (!lead_id) throw new Error("lead_id is required");
