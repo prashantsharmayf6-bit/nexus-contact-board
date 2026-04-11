@@ -5,9 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LEAD_STATUSES, LEAD_SOURCES } from '@/lib/constants';
 import { Lead } from '@/hooks/useLeads';
 import { useTeams } from '@/hooks/useTeams';
+import { useAllProfilesMap } from '@/hooks/useProfiles';
 
 interface Props {
   open: boolean;
@@ -19,6 +21,7 @@ interface Props {
 
 const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: Props) => {
   const { data: teams = [] } = useTeams();
+  const { data: profiles = [] } = useAllProfilesMap();
   const [form, setForm] = useState({
     name: initialData?.name || '',
     email: initialData?.email || '',
@@ -30,6 +33,7 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
     value: initialData?.value?.toString() || '0',
     notes: initialData?.notes || '',
     team_id: initialData?.team_id || 'none',
+    assigned_to: initialData?.assigned_to || 'none',
   });
 
   useEffect(() => {
@@ -45,6 +49,7 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
         value: initialData.value?.toString() || '0',
         notes: initialData.notes || '',
         team_id: initialData.team_id || 'none',
+        assigned_to: initialData.assigned_to || 'none',
       });
     }
   }, [open, initialData]);
@@ -55,7 +60,7 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
       ...form,
       value: parseFloat(form.value) || 0,
       team_id: form.team_id === 'none' ? null : form.team_id,
-      assigned_to: null,
+      assigned_to: form.assigned_to === 'none' ? null : form.assigned_to,
     });
   };
 
@@ -113,6 +118,33 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
               </Select>
             </div>
           </div>
+
+          {/* Owner assignment */}
+          <div className="space-y-2">
+            <Label>Assign Owner</Label>
+            <Select value={form.assigned_to} onValueChange={v => update('assigned_to', v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Unassigned" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Unassigned</SelectItem>
+                {(profiles || []).map((p: any) => (
+                  <SelectItem key={p.user_id} value={p.user_id}>
+                    <div className="flex items-center gap-2">
+                      <Avatar className="w-5 h-5">
+                        <AvatarImage src={p.avatar_url || undefined} />
+                        <AvatarFallback className="text-[9px] bg-primary/10 text-primary">
+                          {(p.first_name?.[0] || p.full_name?.[0] || '?').toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span>{p.full_name || `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Unknown'}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {teams.length > 0 && (
             <div className="space-y-2">
               <Label>Share with Team</Label>
