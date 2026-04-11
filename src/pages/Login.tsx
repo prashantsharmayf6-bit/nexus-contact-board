@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
+import ezycrmLogo from '@/assets/ezycrm-logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -50,9 +51,7 @@ const Login = () => {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <Card className="w-full max-w-md shadow-xl border-0 bg-card">
         <CardHeader className="text-center space-y-2">
-          <div className="mx-auto w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-2">
-            <span className="text-primary-foreground font-bold text-xl">Ez</span>
-          </div>
+          <img src={ezycrmLogo} alt="EzyCRM" className="mx-auto w-16 h-16 mb-2" />
           <CardTitle className="text-2xl font-bold">Welcome to EzyCRM</CardTitle>
           <CardDescription>Manage your leads, close more deals</CardDescription>
         </CardHeader>
