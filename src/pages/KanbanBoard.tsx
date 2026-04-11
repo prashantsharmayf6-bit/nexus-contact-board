@@ -73,7 +73,7 @@ const KanbanBoard = () => {
               {/* Column Body */}
               <div
                 className={cn(
-                  'rounded-b-xl border border-t-0 p-3 space-y-3 min-h-[240px] transition-all duration-200',
+                  'rounded-b-xl border border-t-0 p-3 space-y-3 min-h-[520px] transition-all duration-200',
                   'bg-gradient-to-b from-muted/60 to-muted/30',
                   isDropping && 'ring-2 ring-offset-2 scale-[1.02]',
                 )}
