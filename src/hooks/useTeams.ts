@@ -52,10 +52,21 @@ export const useTeamMembers = (teamId: string | null) => {
     queryFn: async () => {
       const { data: members, error } = await supabase
         .from('team_members')
-        .select('*, profiles(full_name, avatar_url)')
+        .select('*')
         .eq('team_id', teamId!);
       if (error) throw error;
-      return members;
+
+      // Fetch profiles for each member
+      const userIds = members.map(m => m.user_id);
+      const { data: profiles } = await supabase
+        .from('profiles')
+        .select('user_id, full_name, avatar_url')
+        .in('user_id', userIds);
+
+      return members.map(m => ({
+        ...m,
+        profiles: profiles?.find(p => p.user_id === m.user_id) || null,
+      }));
     },
     enabled: !!teamId,
   });
