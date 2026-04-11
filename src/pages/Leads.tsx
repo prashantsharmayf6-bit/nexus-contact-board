@@ -46,7 +46,8 @@ const Leads = () => {
   }, [leads, filters, sortField, sortDir]);
 
   const handleCreate = async (data: any) => {
-    await createLead.mutateAsync(data);
+    const { shared_with, ...leadData } = data;
+    await createLead.mutateAsync(leadData);
     setFormOpen(false);
     toast.success('Lead created');
   };
