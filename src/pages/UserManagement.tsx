@@ -242,7 +242,7 @@ const UserManagement = () => {
             </div>
             <div className="space-y-1.5">
               <Label>Phone (optional)</Label>
-              <Input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+1 (555) 000-0000" />
+              <Input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 98765 43210" />
             </div>
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setInviteOpen(false)}>Cancel</Button>

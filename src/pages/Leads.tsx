@@ -83,7 +83,7 @@ const Leads = () => {
                 <TableCell>{lead.company || '—'}</TableCell>
                 <TableCell><LeadStatusBadge status={lead.status} /></TableCell>
                 <TableCell className="capitalize">{lead.source || '—'}</TableCell>
-                <TableCell>${(lead.value || 0).toLocaleString()}</TableCell>
+                <TableCell>₹{(lead.value || 0).toLocaleString('en-IN')}</TableCell>
                 <TableCell>{format(new Date(lead.created_at), 'MMM d, yyyy')}</TableCell>
                 <TableCell>
                   <div className="flex gap-1" onClick={e => e.stopPropagation()}>
