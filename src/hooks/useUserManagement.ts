@@ -20,17 +20,15 @@ export const useUserInvitations = () => {
 };
 
 export const useInviteUser = () => {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (invitation: { first_name: string; last_name: string; email: string; phone?: string }) => {
-      const { data, error } = await supabase
-        .from('user_invitations')
-        .insert({ ...invitation, invited_by: user!.id })
-        .select()
-        .single();
+      const { data, error } = await supabase.functions.invoke('send-invitation', {
+        body: invitation,
+      });
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
       return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['user-invitations'] }),
@@ -64,6 +62,24 @@ export const useAllProfiles = () => {
         .order('created_at', { ascending: false });
       if (error) throw error;
       return data;
+    },
+    enabled: !!user,
+  });
+};
+
+export const useIsAdmin = () => {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ['is-admin', user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user!.id)
+        .eq('role', 'admin');
+      if (error) throw error;
+      return (data?.length ?? 0) > 0;
     },
     enabled: !!user,
   });
