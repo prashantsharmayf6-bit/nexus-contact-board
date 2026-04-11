@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, UserPlus, Mail, Phone, Trash2, Users, UserCheck, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -21,6 +22,22 @@ const UserManagement = () => {
   const inviteUser = useInviteUser();
   const deleteInvitation = useDeleteInvitation();
   const deleteUser = useDeleteUser();
+  const { data: allRoles = [] } = useAllUserRoles();
+  const manageRole = useManageRole();
+
+  const getUserRole = (userId: string) => {
+    const role = allRoles.find((r: any) => r.user_id === userId);
+    return role?.role || 'user';
+  };
+
+  const handleRoleChange = async (userId: string, newRole: string) => {
+    try {
+      await manageRole.mutateAsync({ user_id: userId, role: newRole, action: 'set' });
+      toast.success(`Role updated to ${newRole}`);
+    } catch (err: any) {
+      toast.error('Failed to update role: ' + (err.message || 'Unknown error'));
+    }
+  };
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
