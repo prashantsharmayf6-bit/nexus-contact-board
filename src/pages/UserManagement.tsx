@@ -247,7 +247,7 @@ const UserManagement = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Invite User</DialogTitle>
-            <DialogDescription>Invite a new user to LeadFlow. They'll receive an email invitation to set up their account.</DialogDescription>
+            <DialogDescription>Invite a new user to EzyCRM. They'll receive an email invitation to set up their account.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleInvite} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
