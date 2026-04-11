@@ -36,7 +36,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "Ezy CRM"
+const SITE_NAME = "Blue Horizon CRM"
 const SENDER_DOMAIN = "notify.ezyflow.in"
 const ROOT_DOMAIN = "ezyflow.in"
 const FROM_DOMAIN = "ezyflow.in" // Domain shown in From address (may be root or sender subdomain)
