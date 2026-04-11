@@ -22,7 +22,7 @@ const AppSidebar = () => {
     <aside className="w-64 border-r border-border bg-card flex flex-col h-screen sticky top-0">
       <div className="p-6 border-b border-border">
         <div className="flex items-center gap-3">
-          <img src={ezycrmLogo} alt="EzyCRM" className="w-9 h-9" />
+          <img src={ezycrmLogo} alt="EzyCRM" className="h-9 object-contain" />
           <span className="text-lg font-bold text-foreground">EzyCRM</span>
         </div>
       </div>

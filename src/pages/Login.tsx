@@ -51,7 +51,7 @@ const Login = () => {
     <div className="flex min-h-screen items-center justify-center bg-background">
       <Card className="w-full max-w-md shadow-xl border-0 bg-card">
         <CardHeader className="text-center space-y-2">
-          <img src={ezycrmLogo} alt="EzyCRM" className="mx-auto w-16 h-16 mb-2" />
+          <img src={ezycrmLogo} alt="EzyCRM" className="mx-auto h-20 object-contain mb-2" />
           <CardTitle className="text-2xl font-bold">Welcome to EzyCRM</CardTitle>
           <CardDescription>Manage your leads, close more deals</CardDescription>
         </CardHeader>
