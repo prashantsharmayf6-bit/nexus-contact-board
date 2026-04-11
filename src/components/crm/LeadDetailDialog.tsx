@@ -10,7 +10,8 @@ import { Lead } from '@/hooks/useLeads';
 import { useLeadNotes, useAddNote, useCallLogs, useAddCallLog, useLeadActivities, useLeadAttachments, useAddAttachment } from '@/hooks/useLeadDetails';
 import LeadStatusBadge from './LeadStatusBadge';
 import { format } from 'date-fns';
-import { MessageSquare, Phone, Clock, Paperclip, Upload, FileText, PhoneCall, PhoneIncoming, PhoneOutgoing } from 'lucide-react';
+import { MessageSquare, Phone, Clock, Paperclip, Upload, FileText, PhoneCall, PhoneIncoming, PhoneOutgoing, Brain } from 'lucide-react';
+import LeadAIInsights from './LeadAIInsights';
 import { toast } from 'sonner';
 
 interface Props {
