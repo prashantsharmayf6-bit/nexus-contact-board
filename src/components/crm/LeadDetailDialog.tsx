@@ -10,8 +10,7 @@ import { Lead } from '@/hooks/useLeads';
 import { useLeadNotes, useAddNote, useCallLogs, useAddCallLog, useLeadActivities, useLeadAttachments, useAddAttachment } from '@/hooks/useLeadDetails';
 import LeadStatusBadge from './LeadStatusBadge';
 import { format } from 'date-fns';
-import { MessageSquare, Phone, Clock, Paperclip, Upload, FileText, PhoneCall, PhoneIncoming, PhoneOutgoing, Brain } from 'lucide-react';
-import LeadAIInsights from './LeadAIInsights';
+import { MessageSquare, Phone, Clock, Paperclip, Upload, FileText, PhoneCall, PhoneIncoming, PhoneOutgoing } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Props {
@@ -81,20 +80,13 @@ const LeadDetailDialog = ({ lead, open, onOpenChange }: Props) => {
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="insights" className="mt-4">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="insights">
-              <Brain className="w-3.5 h-3.5 mr-1" /> AI
-            </TabsTrigger>
+        <Tabs defaultValue="timeline" className="mt-4">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="timeline">Timeline</TabsTrigger>
             <TabsTrigger value="notes">Notes</TabsTrigger>
             <TabsTrigger value="calls">Calls</TabsTrigger>
             <TabsTrigger value="files">Files</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="insights" className="mt-4">
-            <LeadAIInsights leadId={lead.id} />
-          </TabsContent>
 
           <TabsContent value="timeline" className="space-y-3 mt-4">
             {activities?.length === 0 && <p className="text-muted-foreground text-sm text-center py-8">No activity yet</p>}
