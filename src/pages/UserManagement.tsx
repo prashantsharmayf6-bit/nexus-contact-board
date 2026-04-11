@@ -14,11 +14,13 @@ import { Plus, UserPlus, Mail, Phone, Trash2, Users, UserCheck, ShieldCheck } fr
 import { toast } from 'sonner';
 
 const UserManagement = () => {
+  const { user } = useAuth();
   const { data: invitations = [] } = useUserInvitations();
   const { data: profiles = [] } = useAllProfiles();
   const { data: isAdmin = false } = useIsAdmin();
   const inviteUser = useInviteUser();
   const deleteInvitation = useDeleteInvitation();
+  const deleteUser = useDeleteUser();
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
@@ -47,6 +49,16 @@ const UserManagement = () => {
       }
     } catch (err: any) {
       toast.error('Failed to invite user: ' + (err.message || 'Unknown error'));
+    }
+  };
+
+  const handleDeleteUser = async (userId: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete user "${name}"? This action cannot be undone.`)) return;
+    try {
+      await deleteUser.mutateAsync(userId);
+      toast.success(`User "${name}" has been deleted.`);
+    } catch (err: any) {
+      toast.error('Failed to delete user: ' + (err.message || 'Unknown error'));
     }
   };
 
