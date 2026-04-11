@@ -9,9 +9,12 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Preview,
   Text,
 } from 'npm:@react-email/components@0.0.22'
+
+const LOGO_URL = 'https://eoprxxobxtesoxwfjpgk.supabase.co/storage/v1/object/public/email-assets/ezycrm-logo.png'
 
 interface RecoveryEmailProps {
   siteName: string
@@ -27,6 +30,7 @@ export const RecoveryEmail = ({
     <Preview>Reset your password for {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
+        <Img src={LOGO_URL} alt="Ezy CRM" width="48" height="48" style={logo} />
         <Heading style={h1}>Reset your password</Heading>
         <Text style={text}>
           We received a request to reset your password for {siteName}. Click

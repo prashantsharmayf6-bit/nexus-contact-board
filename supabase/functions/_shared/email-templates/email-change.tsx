@@ -9,10 +9,13 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Link,
   Preview,
   Text,
 } from 'npm:@react-email/components@0.0.22'
+
+const LOGO_URL = 'https://eoprxxobxtesoxwfjpgk.supabase.co/storage/v1/object/public/email-assets/ezycrm-logo.png'
 
 interface EmailChangeEmailProps {
   siteName: string
@@ -32,6 +35,7 @@ export const EmailChangeEmail = ({
     <Preview>Confirm your email change for {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
+        <Img src={LOGO_URL} alt="Ezy CRM" width="48" height="48" style={logo} />
         <Heading style={h1}>Confirm your email change</Heading>
         <Text style={text}>
           You requested to change your email address for {siteName} from{' '}
