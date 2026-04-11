@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { LEAD_STATUSES, LEAD_SOURCES } from '@/lib/constants';
 import { Lead } from '@/hooks/useLeads';
+import { useTeams } from '@/hooks/useTeams';
 
 interface Props {
   open: boolean;
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: Props) => {
+  const { data: teams = [] } = useTeams();
   const [form, setForm] = useState({
     name: initialData?.name || '',
     email: initialData?.email || '',
@@ -27,14 +29,32 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
     source: initialData?.source || 'manual',
     value: initialData?.value?.toString() || '0',
     notes: initialData?.notes || '',
+    team_id: initialData?.team_id || 'none',
   });
+
+  useEffect(() => {
+    if (open && initialData) {
+      setForm({
+        name: initialData.name || '',
+        email: initialData.email || '',
+        phone: initialData.phone || '',
+        company: initialData.company || '',
+        title: initialData.title || '',
+        status: initialData.status || 'new',
+        source: initialData.source || 'manual',
+        value: initialData.value?.toString() || '0',
+        notes: initialData.notes || '',
+        team_id: initialData.team_id || 'none',
+      });
+    }
+  }, [open, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({
       ...form,
       value: parseFloat(form.value) || 0,
-      team_id: null,
+      team_id: form.team_id === 'none' ? null : form.team_id,
       assigned_to: null,
     });
   };
@@ -93,6 +113,18 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
               </Select>
             </div>
           </div>
+          {teams.length > 0 && (
+            <div className="space-y-2">
+              <Label>Share with Team</Label>
+              <Select value={form.team_id} onValueChange={v => update('team_id', v)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">Private (only me)</SelectItem>
+                  {teams.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           <div className="space-y-2">
             <Label>Notes</Label>
             <Textarea value={form.notes} onChange={e => update('notes', e.target.value)} rows={3} />

@@ -9,6 +9,7 @@ const links = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/leads', icon: Users, label: 'Leads' },
   { to: '/kanban', icon: Kanban, label: 'Kanban Board' },
+  { to: '/team', icon: Settings, label: 'Team' },
 ];
 
 const AppSidebar = () => {
