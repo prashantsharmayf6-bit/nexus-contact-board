@@ -247,6 +247,26 @@ const Leads = () => {
                     <p className="text-[11px] text-muted-foreground mt-1 text-right capitalize">{lead.source || 'manual'}</p>
                   </div>
 
+                  {/* Owner avatar */}
+                  {lead.assigned_to && profilesMap.get(lead.assigned_to) && (() => {
+                    const owner = profilesMap.get(lead.assigned_to!);
+                    const ownerName = owner?.full_name || `${owner?.first_name || ''} ${owner?.last_name || ''}`.trim() || 'Unknown';
+                    const ownerInitial = (owner?.first_name?.[0] || owner?.full_name?.[0] || '?').toUpperCase();
+                    return (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex-shrink-0">
+                            <Avatar className="w-7 h-7 border-2 border-background shadow-sm">
+                              <AvatarImage src={owner?.avatar_url || undefined} />
+                              <AvatarFallback className="text-[10px] bg-primary/10 text-primary">{ownerInitial}</AvatarFallback>
+                            </Avatar>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p className="text-xs">Owner: {ownerName}</p></TooltipContent>
+                      </Tooltip>
+                    );
+                  })()}
+
                   {/* Date */}
                   <div className="text-right flex-shrink-0 hidden md:block">
                     <p className="text-xs text-muted-foreground font-medium">{format(new Date(lead.created_at), 'dd MMM yyyy')}</p>
