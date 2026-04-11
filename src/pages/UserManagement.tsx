@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useUserInvitations, useInviteUser, useDeleteInvitation, useAllProfiles } from '@/hooks/useUserManagement';
+import { useUserInvitations, useInviteUser, useDeleteInvitation, useAllProfiles, useIsAdmin } from '@/hooks/useUserManagement';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,12 +9,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, UserPlus, Mail, Phone, Trash2, Users, UserCheck } from 'lucide-react';
+import { Plus, UserPlus, Mail, Phone, Trash2, Users, UserCheck, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
 const UserManagement = () => {
   const { data: invitations = [] } = useUserInvitations();
   const { data: profiles = [] } = useAllProfiles();
+  const { data: isAdmin = false } = useIsAdmin();
   const inviteUser = useInviteUser();
   const deleteInvitation = useDeleteInvitation();
 
@@ -27,7 +28,7 @@ const UserManagement = () => {
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await inviteUser.mutateAsync({
+      const result = await inviteUser.mutateAsync({
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         email: email.trim(),
@@ -38,7 +39,11 @@ const UserManagement = () => {
       setEmail('');
       setPhone('');
       setInviteOpen(false);
-      toast.success('User invited successfully!');
+      if (result?.email_sent) {
+        toast.success('Invitation sent! The user will receive an email to set up their account.');
+      } else {
+        toast.success('Invitation created, but email could not be sent. The user can still sign up manually.');
+      }
     } catch (err: any) {
       toast.error('Failed to invite user: ' + (err.message || 'Unknown error'));
     }
@@ -55,11 +60,28 @@ const UserManagement = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">User Management</h1>
-        <Button onClick={() => setInviteOpen(true)}>
-          <UserPlus className="w-4 h-4 mr-2" /> Invite User
-        </Button>
+        <div>
+          <h1 className="text-2xl font-bold">User Management</h1>
+          {isAdmin && (
+            <p className="text-xs text-emerald-600 flex items-center gap-1 mt-1">
+              <ShieldCheck className="w-3.5 h-3.5" /> Admin Access
+            </p>
+          )}
+        </div>
+        {isAdmin && (
+          <Button onClick={() => setInviteOpen(true)}>
+            <UserPlus className="w-4 h-4 mr-2" /> Invite User
+          </Button>
+        )}
       </div>
+
+      {!isAdmin && (
+        <Card className="border-amber-200 bg-amber-50">
+          <CardContent className="py-4 text-center text-amber-700 text-sm">
+            Only administrators can invite new users. Contact your admin to get access.
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
@@ -118,7 +140,7 @@ const UserManagement = () => {
               {invitations.length === 0 ? (
                 <div className="py-8 text-center text-muted-foreground">
                   <UserPlus className="w-10 h-10 mx-auto mb-3 opacity-50" />
-                  <p>No invitations yet. Click "Invite User" to get started.</p>
+                  <p>No invitations yet. {isAdmin ? 'Click "Invite User" to get started.' : 'Ask an admin to invite users.'}</p>
                 </div>
               ) : (
                 <Table>
@@ -129,7 +151,7 @@ const UserManagement = () => {
                       <TableHead>Phone</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Invited</TableHead>
-                      <TableHead className="w-12"></TableHead>
+                      {isAdmin && <TableHead className="w-12"></TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -148,15 +170,17 @@ const UserManagement = () => {
                         <TableCell className="text-muted-foreground text-sm">
                           {new Date(inv.created_at).toLocaleDateString()}
                         </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDelete(inv.id)}
-                          >
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
-                        </TableCell>
+                        {isAdmin && (
+                          <TableCell>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDelete(inv.id)}
+                            >
+                              <Trash2 className="w-4 h-4 text-destructive" />
+                            </Button>
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>
@@ -223,7 +247,7 @@ const UserManagement = () => {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Invite User</DialogTitle>
-            <DialogDescription>Invite a new user to LeadFlow. They'll be able to sign up using the email you provide.</DialogDescription>
+            <DialogDescription>Invite a new user to LeadFlow. They'll receive an email invitation to set up their account.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleInvite} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
@@ -247,7 +271,7 @@ const UserManagement = () => {
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setInviteOpen(false)}>Cancel</Button>
               <Button type="submit" disabled={inviteUser.isPending}>
-                <UserPlus className="w-4 h-4 mr-2" /> Send Invitation
+                <Mail className="w-4 h-4 mr-2" /> Send Invitation
               </Button>
             </div>
           </form>
