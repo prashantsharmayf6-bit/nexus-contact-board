@@ -54,7 +54,8 @@ const Leads = () => {
 
   const handleUpdate = async (data: any) => {
     if (!editLead) return;
-    await updateLead.mutateAsync({ id: editLead.id, ...data });
+    const { shared_with, ...leadData } = data;
+    await updateLead.mutateAsync({ id: editLead.id, ...leadData });
     setEditLead(null);
     toast.success('Lead updated');
   };
