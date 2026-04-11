@@ -80,7 +80,7 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
             </div>
             <div className="space-y-2">
               <Label>Phone</Label>
-              <Input value={form.phone} onChange={e => update('phone', e.target.value)} />
+              <Input value={form.phone} onChange={e => update('phone', e.target.value)} placeholder="+91 98765 43210" />
             </div>
             <div className="space-y-2">
               <Label>Company</Label>
@@ -91,7 +91,7 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
               <Input value={form.title} onChange={e => update('title', e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>Value ($)</Label>
+              <Label>Value (₹)</Label>
               <Input type="number" value={form.value} onChange={e => update('value', e.target.value)} />
             </div>
             <div className="space-y-2">

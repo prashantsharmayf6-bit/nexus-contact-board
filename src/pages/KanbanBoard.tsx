@@ -5,7 +5,7 @@ import LeadStatusBadge from '@/components/crm/LeadStatusBadge';
 import LeadDetailDialog from '@/components/crm/LeadDetailDialog';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Building, DollarSign } from 'lucide-react';
+import { Building, IndianRupee } from 'lucide-react';
 import { toast } from 'sonner';
 
 const KanbanBoard = () => {
@@ -62,8 +62,8 @@ const KanbanBoard = () => {
                     )}
                     {(lead.value || 0) > 0 && (
                       <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
-                        <DollarSign className="w-3 h-3" />
-                        ${(lead.value || 0).toLocaleString()}
+                        <IndianRupee className="w-3 h-3" />
+                        ₹{(lead.value || 0).toLocaleString('en-IN')}
                       </div>
                     )}
                   </Card>

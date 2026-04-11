@@ -1,7 +1,7 @@
 import { useLeads } from '@/hooks/useLeads';
 import { LEAD_STATUSES } from '@/lib/constants';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, DollarSign, TrendingUp, CheckCircle } from 'lucide-react';
+import { Users, IndianRupee, TrendingUp, CheckCircle } from 'lucide-react';
 
 const Dashboard = () => {
   const { data: leads = [] } = useLeads();
@@ -18,7 +18,7 @@ const Dashboard = () => {
 
   const stats = [
     { label: 'Total Leads', value: totalLeads, icon: Users, color: 'text-primary' },
-    { label: 'Pipeline Value', value: `$${totalValue.toLocaleString()}`, icon: DollarSign, color: 'text-green-500' },
+    { label: 'Pipeline Value', value: `₹${totalValue.toLocaleString('en-IN')}`, icon: IndianRupee, color: 'text-green-500' },
     { label: 'Won Deals', value: wonDeals, icon: CheckCircle, color: 'text-green-500' },
     { label: 'Conversion', value: `${conversionRate}%`, icon: TrendingUp, color: 'text-primary' },
   ];
