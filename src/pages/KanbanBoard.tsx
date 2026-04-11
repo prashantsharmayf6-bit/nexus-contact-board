@@ -77,7 +77,7 @@ const KanbanBoard = () => {
                   'bg-gradient-to-b from-muted/60 to-muted/30',
                   isDropping && 'ring-2 ring-offset-2 scale-[1.02]',
                 )}
-                style={isDropping ? { ringColor: status.solidBg } : {}}
+                style={isDropping ? { borderColor: status.solidBg } : {}}
               >
                 {columnLeads.length === 0 && (
                   <div className="flex items-center justify-center h-24 text-xs text-muted-foreground/60 border-2 border-dashed border-muted-foreground/20 rounded-lg">
