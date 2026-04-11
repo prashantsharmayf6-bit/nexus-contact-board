@@ -100,6 +100,42 @@ export const useDeleteUser = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['all-profiles'] });
       queryClient.invalidateQueries({ queryKey: ['user-invitations'] });
+      queryClient.invalidateQueries({ queryKey: ['all-user-roles'] });
+    },
+  });
+};
+
+export const useAllUserRoles = () => {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ['all-user-roles'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('user_roles')
+        .select('*');
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
+  });
+};
+
+export const useManageRole = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ user_id, role, action }: { user_id: string; role: string; action: 'set' | 'remove' }) => {
+      const { data, error } = await supabase.functions.invoke('manage-role', {
+        body: { user_id, role, action },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['all-user-roles'] });
+      queryClient.invalidateQueries({ queryKey: ['is-admin'] });
     },
   });
 };
