@@ -1,5 +1,7 @@
 import { LayoutDashboard, Users, Kanban, LogOut, UserCog, UserCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -15,7 +17,22 @@ const links = [
 
 const AppSidebar = () => {
   const { user, signOut } = useAuth();
-  const name = user?.user_metadata?.full_name || user?.email || '';
+
+  const { data: profile } = useQuery({
+    queryKey: ['my-profile', user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user!.id)
+        .single();
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  const name = profile?.full_name || profile?.first_name || user?.user_metadata?.full_name || user?.email || '';
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url;
   const initials = name.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase();
 
   return (
@@ -51,7 +68,7 @@ const AppSidebar = () => {
       <div className="p-4 border-t border-sidebar-border">
         <div className="flex items-center gap-3 mb-3">
           <Avatar className="w-8 h-8">
-            <AvatarImage src={user?.user_metadata?.avatar_url} />
+            <AvatarImage src={avatarUrl} />
             <AvatarFallback className="bg-sidebar-accent text-sidebar-foreground text-xs">{initials}</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
