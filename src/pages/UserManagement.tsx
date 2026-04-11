@@ -223,6 +223,7 @@ const UserManagement = () => {
                       <TableHead>Last Name</TableHead>
                       <TableHead>Phone</TableHead>
                       <TableHead>Joined</TableHead>
+                      {isAdmin && <TableHead className="w-12"></TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -245,6 +246,20 @@ const UserManagement = () => {
                         <TableCell className="text-muted-foreground text-sm">
                           {new Date(profile.created_at).toLocaleDateString()}
                         </TableCell>
+                        {isAdmin && (
+                          <TableCell>
+                            {profile.user_id !== user?.id && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleDeleteUser(profile.user_id, profile.full_name || profile.first_name || 'Unknown')}
+                                disabled={deleteUser.isPending}
+                              >
+                                <Trash2 className="w-4 h-4 text-destructive" />
+                              </Button>
+                            )}
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>
