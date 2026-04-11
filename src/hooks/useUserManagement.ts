@@ -84,3 +84,22 @@ export const useIsAdmin = () => {
     enabled: !!user,
   });
 };
+
+export const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (userId: string) => {
+      const { data, error } = await supabase.functions.invoke('delete-user', {
+        body: { user_id: userId },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['all-profiles'] });
+      queryClient.invalidateQueries({ queryKey: ['user-invitations'] });
+    },
+  });
+};

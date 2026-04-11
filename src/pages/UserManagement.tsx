@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useUserInvitations, useInviteUser, useDeleteInvitation, useAllProfiles, useIsAdmin } from '@/hooks/useUserManagement';
+import { useUserInvitations, useInviteUser, useDeleteInvitation, useAllProfiles, useIsAdmin, useDeleteUser } from '@/hooks/useUserManagement';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,11 +14,13 @@ import { Plus, UserPlus, Mail, Phone, Trash2, Users, UserCheck, ShieldCheck } fr
 import { toast } from 'sonner';
 
 const UserManagement = () => {
+  const { user } = useAuth();
   const { data: invitations = [] } = useUserInvitations();
   const { data: profiles = [] } = useAllProfiles();
   const { data: isAdmin = false } = useIsAdmin();
   const inviteUser = useInviteUser();
   const deleteInvitation = useDeleteInvitation();
+  const deleteUser = useDeleteUser();
 
   const [inviteOpen, setInviteOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
@@ -46,6 +49,16 @@ const UserManagement = () => {
       }
     } catch (err: any) {
       toast.error('Failed to invite user: ' + (err.message || 'Unknown error'));
+    }
+  };
+
+  const handleDeleteUser = async (userId: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete user "${name}"? This action cannot be undone.`)) return;
+    try {
+      await deleteUser.mutateAsync(userId);
+      toast.success(`User "${name}" has been deleted.`);
+    } catch (err: any) {
+      toast.error('Failed to delete user: ' + (err.message || 'Unknown error'));
     }
   };
 
@@ -210,6 +223,7 @@ const UserManagement = () => {
                       <TableHead>Last Name</TableHead>
                       <TableHead>Phone</TableHead>
                       <TableHead>Joined</TableHead>
+                      {isAdmin && <TableHead className="w-12"></TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -232,6 +246,20 @@ const UserManagement = () => {
                         <TableCell className="text-muted-foreground text-sm">
                           {new Date(profile.created_at).toLocaleDateString()}
                         </TableCell>
+                        {isAdmin && (
+                          <TableCell>
+                            {profile.user_id !== user?.id && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleDeleteUser(profile.user_id, profile.full_name || profile.first_name || 'Unknown')}
+                                disabled={deleteUser.isPending}
+                              >
+                                <Trash2 className="w-4 h-4 text-destructive" />
+                              </Button>
+                            )}
+                          </TableCell>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>
