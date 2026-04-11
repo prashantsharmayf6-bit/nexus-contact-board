@@ -239,45 +239,72 @@ const UserManagement = () => {
                       <TableHead>First Name</TableHead>
                       <TableHead>Last Name</TableHead>
                       <TableHead>Phone</TableHead>
+                      <TableHead>Role</TableHead>
                       <TableHead>Joined</TableHead>
                       {isAdmin && <TableHead className="w-12"></TableHead>}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {profiles.map((profile: any) => (
-                      <TableRow key={profile.id}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <Avatar className="w-8 h-8">
-                              <AvatarImage src={profile.avatar_url} />
-                              <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                                {(profile.first_name?.[0] || profile.full_name?.[0] || '?').toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{profile.full_name || `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Unknown'}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>{profile.first_name || '—'}</TableCell>
-                        <TableCell>{profile.last_name || '—'}</TableCell>
-                        <TableCell>{profile.phone || '—'}</TableCell>
-                        <TableCell className="text-muted-foreground text-sm">
-                          {new Date(profile.created_at).toLocaleDateString()}
-                        </TableCell>
-                        {isAdmin && (
+                    {profiles.map((profile: any) => {
+                      const currentRole = getUserRole(profile.user_id);
+                      const isSelf = profile.user_id === user?.id;
+                      return (
+                        <TableRow key={profile.id}>
                           <TableCell>
-                            {profile.user_id !== user?.id && (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleDeleteUser(profile.user_id, profile.full_name || profile.first_name || 'Unknown')}
-                                disabled={deleteUser.isPending}
+                            <div className="flex items-center gap-3">
+                              <Avatar className="w-8 h-8">
+                                <AvatarImage src={profile.avatar_url} />
+                                <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                                  {(profile.first_name?.[0] || profile.full_name?.[0] || '?').toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="font-medium">{profile.full_name || `${profile.first_name || ''} ${profile.last_name || ''}`.trim() || 'Unknown'}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>{profile.first_name || '—'}</TableCell>
+                          <TableCell>{profile.last_name || '—'}</TableCell>
+                          <TableCell>{profile.phone || '—'}</TableCell>
+                          <TableCell>
+                            {isAdmin && !isSelf ? (
+                              <Select
+                                value={currentRole}
+                                onValueChange={(val) => handleRoleChange(profile.user_id, val)}
+                                disabled={manageRole.isPending}
                               >
-                                <Trash2 className="w-4 h-4 text-destructive" />
-                              </Button>
+                                <SelectTrigger className="w-28 h-8 text-xs">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="admin">Admin</SelectItem>
+                                  <SelectItem value="user">User</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <Badge variant={currentRole === 'admin' ? 'default' : 'secondary'} className="text-xs">
+                                {currentRole === 'admin' ? '🛡️ Admin' : 'User'}
+                              </Badge>
                             )}
                           </TableCell>
-                        )}
-                      </TableRow>
+                          <TableCell className="text-muted-foreground text-sm">
+                            {new Date(profile.created_at).toLocaleDateString()}
+                          </TableCell>
+                          {isAdmin && (
+                            <TableCell>
+                              {!isSelf && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleDeleteUser(profile.user_id, profile.full_name || profile.first_name || 'Unknown')}
+                                  disabled={deleteUser.isPending}
+                                >
+                                  <Trash2 className="w-4 h-4 text-destructive" />
+                                </Button>
+                              )}
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      );
+                    })}
                     ))}
                   </TableBody>
                 </Table>
