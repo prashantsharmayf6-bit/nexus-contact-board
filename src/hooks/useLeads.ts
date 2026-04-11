@@ -108,34 +108,10 @@ export const useUpdateLead = () => {
         });
       }
 
-      // Send lead-assigned email if owner changed
-      if (updates.assigned_to && updates.assigned_to !== oldLead?.assigned_to) {
-        try {
-          const { data: assigneeProfile } = await supabase
-            .from('profiles')
-            .select('first_name, full_name')
-            .eq('user_id', updates.assigned_to)
-            .single();
-          const { data: assignerProfile } = await supabase
-            .from('profiles')
-            .select('first_name, full_name')
-            .eq('user_id', user!.id)
-            .single();
-          // Get assignee's email from auth (we need to look it up)
-          const { data: assigneeAuth } = await supabase.auth.getUser();
-          // We can get email from profiles or use a lookup - for now use the lead's email context
-          // Actually we need the assignee's auth email - let's check if we have it via user_invitations or auth
-          const assigneeName = assigneeProfile?.full_name || assigneeProfile?.first_name || '';
-          const assignerName = assignerProfile?.full_name || assignerProfile?.first_name || '';
-          
-          // We can't directly get another user's email from client side, 
-          // but the assignee will see the assignment in the app
-          // For email sending, we'd need the assignee's email which requires service role access
-          // This is a best-effort approach
-        } catch (e) {
-          console.log('Could not send assignment email', e);
-        }
-      }
+      // Note: Lead assignment/sharing emails require looking up other users' emails,
+      // which needs service role access. These notifications will be sent
+      // via the send-transactional-email edge function when the backend
+      // has access to recipient email addresses.
 
       return data;
     },
