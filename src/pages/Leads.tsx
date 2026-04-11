@@ -2,16 +2,20 @@ import { useState, useMemo } from 'react';
 import { useLeads, useCreateLead, useUpdateLead, useDeleteLead, Lead } from '@/hooks/useLeads';
 import { LEAD_STATUSES } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import LeadStatusBadge from '@/components/crm/LeadStatusBadge';
 import LeadFormDialog from '@/components/crm/LeadFormDialog';
 import LeadDetailDialog from '@/components/crm/LeadDetailDialog';
 import LeadFilters from '@/components/crm/LeadFilters';
+import { useAllProfilesMap } from '@/hooks/useProfiles';
 import { Plus, Pencil, Trash2, Eye, Building, Mail, Phone, IndianRupee, ArrowUpDown, TrendingUp, Users, Zap } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
 const Leads = () => {
   const { data: leads = [], isLoading } = useLeads();
+  const { profilesMap } = useAllProfilesMap();
   const createLead = useCreateLead();
   const updateLead = useUpdateLead();
   const deleteLead = useDeleteLead();
