@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import Leads from "./pages/Leads";
 import KanbanBoard from "./pages/KanbanBoard";
 import UserManagement from "./pages/UserManagement";
+import Profile from "./pages/Profile";
 import AppLayout from "./components/crm/AppLayout";
 import NotFound from "./pages/NotFound";
 
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/leads" element={<Leads />} />
               <Route path="/kanban" element={<KanbanBoard />} />
               <Route path="/users" element={<UserManagement />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -2,16 +2,20 @@ import { useState, useMemo } from 'react';
 import { useLeads, useCreateLead, useUpdateLead, useDeleteLead, Lead } from '@/hooks/useLeads';
 import { LEAD_STATUSES } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import LeadStatusBadge from '@/components/crm/LeadStatusBadge';
 import LeadFormDialog from '@/components/crm/LeadFormDialog';
 import LeadDetailDialog from '@/components/crm/LeadDetailDialog';
 import LeadFilters from '@/components/crm/LeadFilters';
+import { useAllProfilesMap } from '@/hooks/useProfiles';
 import { Plus, Pencil, Trash2, Eye, Building, Mail, Phone, IndianRupee, ArrowUpDown, TrendingUp, Users, Zap } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
 const Leads = () => {
   const { data: leads = [], isLoading } = useLeads();
+  const { profilesMap } = useAllProfilesMap();
   const createLead = useCreateLead();
   const updateLead = useUpdateLead();
   const deleteLead = useDeleteLead();
@@ -242,6 +246,26 @@ const Leads = () => {
                     </div>
                     <p className="text-[11px] text-muted-foreground mt-1 text-right capitalize">{lead.source || 'manual'}</p>
                   </div>
+
+                  {/* Owner avatar */}
+                  {lead.assigned_to && profilesMap.get(lead.assigned_to) && (() => {
+                    const owner = profilesMap.get(lead.assigned_to!);
+                    const ownerName = owner?.full_name || `${owner?.first_name || ''} ${owner?.last_name || ''}`.trim() || 'Unknown';
+                    const ownerInitial = (owner?.first_name?.[0] || owner?.full_name?.[0] || '?').toUpperCase();
+                    return (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div className="flex-shrink-0">
+                            <Avatar className="w-7 h-7 border-2 border-background shadow-sm">
+                              <AvatarImage src={owner?.avatar_url || undefined} />
+                              <AvatarFallback className="text-[10px] bg-primary/10 text-primary">{ownerInitial}</AvatarFallback>
+                            </Avatar>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="top"><p className="text-xs">Owner: {ownerName}</p></TooltipContent>
+                      </Tooltip>
+                    );
+                  })()}
 
                   {/* Date */}
                   <div className="text-right flex-shrink-0 hidden md:block">

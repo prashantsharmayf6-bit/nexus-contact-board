@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Kanban, LogOut, UserCog } from 'lucide-react';
+import { LayoutDashboard, Users, Kanban, LogOut, UserCog, UserCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -58,6 +58,20 @@ const AppSidebar = () => {
             <p className="text-sm font-medium truncate text-sidebar-foreground">{name}</p>
           </div>
         </div>
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            cn(
+              'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors w-full mb-1',
+              isActive
+                ? 'bg-brand-gradient text-white'
+                : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent'
+            )
+          }
+        >
+          <UserCircle className="w-4 h-4" />
+          My Profile
+        </NavLink>
         <Button variant="ghost" size="sm" className="w-full justify-start text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent" onClick={signOut}>
           <LogOut className="w-4 h-4 mr-2" />
           Sign out
