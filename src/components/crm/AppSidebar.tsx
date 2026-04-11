@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Kanban, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, Kanban, LogOut, UserCog } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -9,7 +9,7 @@ const links = [
   { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/leads', icon: Users, label: 'Leads' },
   { to: '/kanban', icon: Kanban, label: 'Kanban Board' },
-  { to: '/team', icon: Settings, label: 'Team' },
+  { to: '/users', icon: UserCog, label: 'User Management' },
 ];
 
 const AppSidebar = () => {
