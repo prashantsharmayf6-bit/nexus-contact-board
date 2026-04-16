@@ -9,7 +9,8 @@ import LeadFormDialog from '@/components/crm/LeadFormDialog';
 import LeadDetailDialog from '@/components/crm/LeadDetailDialog';
 import LeadFilters from '@/components/crm/LeadFilters';
 import { useAllProfilesMap } from '@/hooks/useProfiles';
-import { Plus, Pencil, Trash2, Eye, Building, Mail, Phone, IndianRupee, ArrowUpDown, TrendingUp, Users, Zap } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Plus, Pencil, Trash2, Eye, Building, Mail, Phone, IndianRupee, ArrowUpDown, TrendingUp, Users, Zap, Share2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
