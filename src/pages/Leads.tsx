@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 const Leads = () => {
   const { data: leads = [], isLoading } = useLeads();
   const { profilesMap } = useAllProfilesMap();
+  const { user } = useAuth();
   const createLead = useCreateLead();
   const updateLead = useUpdateLead();
   const deleteLead = useDeleteLead();
