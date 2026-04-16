@@ -12,6 +12,7 @@ import UserManagement from "./pages/UserManagement";
 import Profile from "./pages/Profile";
 import AppLayout from "./components/crm/AppLayout";
 import Unsubscribe from "./pages/Unsubscribe";
+import PublicLeadForm from "./pages/PublicLeadForm";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="/unsubscribe" element={<Unsubscribe />} />
+            <Route path="/contact" element={<PublicLeadForm />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -9,13 +9,15 @@ import LeadFormDialog from '@/components/crm/LeadFormDialog';
 import LeadDetailDialog from '@/components/crm/LeadDetailDialog';
 import LeadFilters from '@/components/crm/LeadFilters';
 import { useAllProfilesMap } from '@/hooks/useProfiles';
-import { Plus, Pencil, Trash2, Eye, Building, Mail, Phone, IndianRupee, ArrowUpDown, TrendingUp, Users, Zap } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Plus, Pencil, Trash2, Eye, Building, Mail, Phone, IndianRupee, ArrowUpDown, TrendingUp, Users, Zap, Share2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
 const Leads = () => {
   const { data: leads = [], isLoading } = useLeads();
   const { profilesMap } = useAllProfilesMap();
+  const { user } = useAuth();
   const createLead = useCreateLead();
   const updateLead = useUpdateLead();
   const deleteLead = useDeleteLead();
@@ -90,12 +92,24 @@ const Leads = () => {
           <h1 className="text-2xl font-bold tracking-tight">Leads</h1>
           <p className="text-sm text-muted-foreground mt-0.5">Manage and track your sales pipeline</p>
         </div>
-        <Button
-          onClick={() => setFormOpen(true)}
-          className="bg-gradient-to-b from-primary to-primary/90 shadow-[0_4px_14px_-2px_hsl(var(--primary)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.15)] hover:shadow-[0_6px_20px_-2px_hsl(var(--primary)/0.5)] hover:-translate-y-0.5 transition-all duration-200 font-semibold"
-        >
-          <Plus className="w-4 h-4 mr-2" /> Add Lead
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              const url = `${window.location.origin}/contact?uid=${user?.id}`;
+              navigator.clipboard.writeText(url);
+              toast.success('Public form link copied to clipboard!');
+            }}
+          >
+            <Share2 className="w-4 h-4 mr-2" /> Share Form
+          </Button>
+          <Button
+            onClick={() => setFormOpen(true)}
+            className="bg-gradient-to-b from-primary to-primary/90 shadow-[0_4px_14px_-2px_hsl(var(--primary)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.15)] hover:shadow-[0_6px_20px_-2px_hsl(var(--primary)/0.5)] hover:-translate-y-0.5 transition-all duration-200 font-semibold"
+          >
+            <Plus className="w-4 h-4 mr-2" /> Add Lead
+          </Button>
+        </div>
       </div>
 
       {/* Stats Row */}
