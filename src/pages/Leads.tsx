@@ -210,7 +210,7 @@ const Leads = () => {
               />
 
               <div className="p-4 pl-5">
-                <div className="flex items-center gap-4">
+                <div className="flex items-start gap-3 md:gap-4 md:items-center">
                   {/* Avatar */}
                   <div
                     className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold"
@@ -224,31 +224,57 @@ const Leads = () => {
 
                   {/* Lead info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold text-sm truncate text-foreground">{lead.name}</h3>
                       <LeadStatusBadge status={lead.status} />
                     </div>
-                    <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mt-1.5 md:flex-wrap">
                       {lead.company && (
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Building className="w-3 h-3 opacity-60" /> {lead.company}
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
+                          <Building className="w-3 h-3 opacity-60 flex-shrink-0" /> <span className="truncate">{lead.company}</span>
                         </span>
                       )}
                       {lead.email && (
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Mail className="w-3 h-3 opacity-60" /> {lead.email}
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
+                          <Mail className="w-3 h-3 opacity-60 flex-shrink-0" /> <span className="truncate">{lead.email}</span>
                         </span>
                       )}
                       {lead.phone && (
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Phone className="w-3 h-3 opacity-60" /> {lead.phone}
+                        <span className="flex items-center gap-1 text-xs text-muted-foreground min-w-0">
+                          <Phone className="w-3 h-3 opacity-60 flex-shrink-0" /> <span className="truncate">{lead.phone}</span>
                         </span>
                       )}
                     </div>
+                    {/* Mobile-only meta row */}
+                    <div className="flex items-center gap-2 mt-2.5 md:hidden">
+                      <div
+                        className="inline-flex items-center gap-0.5 px-2 py-1 rounded-lg text-xs font-bold"
+                        style={{
+                          background: 'linear-gradient(145deg, #10B98118, #10B98108)',
+                          color: '#10B981',
+                          boxShadow: 'inset 0 1px 0 rgba(16,185,129,0.1)',
+                        }}
+                      >
+                        <IndianRupee className="w-3 h-3" />
+                        {(lead.value || 0).toLocaleString('en-IN')}
+                      </div>
+                      <span className="text-[11px] text-muted-foreground capitalize">{lead.source || 'manual'}</span>
+                      <span className="text-[11px] text-muted-foreground ml-auto">{format(new Date(lead.created_at), 'dd MMM')}</span>
+                      {lead.assigned_to && profilesMap.get(lead.assigned_to) && (() => {
+                        const owner = profilesMap.get(lead.assigned_to!);
+                        const ownerInitial = (owner?.first_name?.[0] || owner?.full_name?.[0] || '?').toUpperCase();
+                        return (
+                          <Avatar className="w-6 h-6 border-2 border-background shadow-sm">
+                            <AvatarImage src={owner?.avatar_url || undefined} />
+                            <AvatarFallback className="text-[10px] bg-primary/10 text-primary">{ownerInitial}</AvatarFallback>
+                          </Avatar>
+                        );
+                      })()}
+                    </div>
                   </div>
 
-                  {/* Value pill */}
-                  <div className="flex-shrink-0">
+                  {/* Value pill (desktop) */}
+                  <div className="flex-shrink-0 hidden md:block">
                     <div
                       className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-bold"
                       style={{
@@ -263,7 +289,7 @@ const Leads = () => {
                     <p className="text-[11px] text-muted-foreground mt-1 text-right capitalize">{lead.source || 'manual'}</p>
                   </div>
 
-                  {/* Owner avatar */}
+                  {/* Owner avatar (desktop) */}
                   {lead.assigned_to && profilesMap.get(lead.assigned_to) && (() => {
                     const owner = profilesMap.get(lead.assigned_to!);
                     const ownerName = owner?.full_name || `${owner?.first_name || ''} ${owner?.last_name || ''}`.trim() || 'Unknown';
@@ -271,7 +297,7 @@ const Leads = () => {
                     return (
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div className="flex-shrink-0">
+                          <div className="flex-shrink-0 hidden md:block">
                             <Avatar className="w-7 h-7 border-2 border-background shadow-sm">
                               <AvatarImage src={owner?.avatar_url || undefined} />
                               <AvatarFallback className="text-[10px] bg-primary/10 text-primary">{ownerInitial}</AvatarFallback>
@@ -283,14 +309,14 @@ const Leads = () => {
                     );
                   })()}
 
-                  {/* Date */}
+                  {/* Date (desktop) */}
                   <div className="text-right flex-shrink-0 hidden md:block">
                     <p className="text-xs text-muted-foreground font-medium">{format(new Date(lead.created_at), 'dd MMM yyyy')}</p>
                   </div>
 
-                  {/* Actions */}
+                  {/* Actions (desktop hover) */}
                   <div
-                    className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0"
+                    className="hidden md:flex gap-0.5 opacity-0 group-hover:opacity-100 transition-all duration-200 flex-shrink-0"
                     onClick={e => e.stopPropagation()}
                   >
                     <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg hover:bg-primary/10 hover:text-primary" onClick={() => setDetailLead(lead)}>
