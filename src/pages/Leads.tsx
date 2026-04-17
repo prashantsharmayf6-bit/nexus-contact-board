@@ -87,27 +87,29 @@ const Leads = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0">
           <h1 className="text-2xl font-bold tracking-tight">Leads</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Manage and track your sales pipeline</p>
+          <p className="text-sm text-muted-foreground mt-0.5 hidden sm:block">Manage and track your sales pipeline</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-shrink-0">
           <Button
             variant="outline"
+            size="sm"
             onClick={() => {
               const url = `${window.location.origin}/contact?uid=${user?.id}`;
               navigator.clipboard.writeText(url);
               toast.success('Public form link copied to clipboard!');
             }}
           >
-            <Share2 className="w-4 h-4 mr-2" /> Share Form
+            <Share2 className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Share Form</span>
           </Button>
           <Button
+            size="sm"
             onClick={() => setFormOpen(true)}
             className="bg-gradient-to-b from-primary to-primary/90 shadow-[0_4px_14px_-2px_hsl(var(--primary)/0.4),inset_0_1px_0_hsl(0_0%_100%/0.15)] hover:shadow-[0_6px_20px_-2px_hsl(var(--primary)/0.5)] hover:-translate-y-0.5 transition-all duration-200 font-semibold"
           >
-            <Plus className="w-4 h-4 mr-2" /> Add Lead
+            <Plus className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Add Lead</span>
           </Button>
         </div>
       </div>
