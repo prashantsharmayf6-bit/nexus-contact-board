@@ -212,6 +212,7 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
                           </AvatarFallback>
                         </Avatar>
                         <span>{p.full_name || `${p.first_name || ''} ${p.last_name || ''}`.trim() || 'Unknown'}</span>
+                        {p.email && <span className="text-xs text-muted-foreground ml-1">({p.email})</span>}
                       </div>
                     </SelectItem>
                   ))}
