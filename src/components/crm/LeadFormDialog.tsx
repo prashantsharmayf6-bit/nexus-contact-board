@@ -280,7 +280,10 @@ const LeadFormDialog = ({ open, onOpenChange, onSubmit, initialData, loading }: 
                             {(p.first_name?.[0] || p.full_name?.[0] || '?').toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-sm font-medium text-foreground">{pName}</span>
+                        <div className="flex flex-col min-w-0 flex-1">
+                          <span className="text-sm font-medium text-foreground truncate">{pName}</span>
+                          {p.email && <span className="text-[11px] text-muted-foreground truncate">{p.email}</span>}
+                        </div>
                       </label>
                     );
                   })}
